@@ -12,7 +12,7 @@ Before you begin, ensure you have installed:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/gbv-project.git
+git clone https://github.com/taufik-my/gbv-project.git
 ```
 
 2. Navigate to the project directory:
