@@ -1,44 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { AlertCircle, CloudRain, Power, ThumbsUp, ThumbsDown, Clock } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
-const SimpleMap = () => {
-  return (
-    <div className="w-full h-full bg-gray-700 rounded relative">
-      {/* Map placeholder with grid to simulate map */}
-      <div className="absolute inset-0 bg-gray-800 opacity-50" 
-           style={{ 
-             backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, .05) 25%, rgba(255, 255, 255, .05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .05) 75%, rgba(255, 255, 255, .05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, .05) 25%, rgba(255, 255, 255, .05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .05) 75%, rgba(255, 255, 255, .05) 76%, transparent 77%, transparent)',
-             backgroundSize: '50px 50px' 
-           }}
-      />
-      
-      {/* Sample points to represent gas stations */}
-      <div className="absolute top-1/3 left-1/2 w-3 h-3 bg-blue-500 rounded-full"></div>
-      <div className="absolute top-1/2 left-1/3 w-3 h-3 bg-blue-500 rounded-full"></div>
-      <div className="absolute bottom-1/3 right-1/3 w-3 h-3 bg-blue-500 rounded-full"></div>
-
-      {/* Sample lines to represent pipelines */}
-      <svg className="absolute inset-0 w-full h-full">
-        <line x1="50%" y1="33%" x2="33%" y2="50%" stroke="#10B981" strokeWidth="2" strokeDasharray="5,5" />
-        <line x1="33%" y1="50%" x2="66%" y2="66%" stroke="#10B981" strokeWidth="2" strokeDasharray="5,5" />
-      </svg>
-
-      {/* Legend */}
-      <div className="absolute top-4 right-4 bg-gray-800 p-2 rounded shadow-lg">
-        <h3 className="text-sm font-semibold mb-1">Legend</h3>
-        <div className="flex items-center gap-2 text-xs">
-          <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-          <span>Gas Station</span>
-        </div>
-        <div className="flex items-center gap-2 text-xs mt-1">
-          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          <span>Pipeline</span>
-        </div>
-      </div>
-    </div>
-  );
-};
+import RealMap from './RealMap';  // Import the new map component
+import 'leaflet/dist/leaflet.css';  // Import Leaflet CSS
 
 const DateTime = () => {
   const [date, setDate] = useState(new Date());
@@ -121,11 +85,11 @@ const WeatherWidget = () => {
 
 const CompressorStatusCard = ({ name, status }) => {
   return (
-    <div className="bg-gray-700 p-2 rounded min-w-[100px]"> {/* Reduced padding and min-width */}
-      <div className="text-sm font-semibold mb-1">{name}</div> {/* Reduced margin */}
-      <div className="grid grid-cols-1 gap-1"> {/* Reduced gap */}
-        <div className="flex items-center text-sm"> {/* Added text-sm */}
-          <Power className="w-3 h-3 mr-1" /> {/* Reduced icon size */}
+    <div className="bg-gray-700 p-2 rounded">
+      <div className="text-sm font-semibold mb-1">{name}</div>
+      <div className="grid grid-cols-1 gap-1">
+        <div className="flex items-center text-sm">
+          <Power className="w-3 h-3 mr-1" />
           <span>{status.power}</span>
         </div>
         <div className="flex items-center text-sm">
@@ -141,49 +105,47 @@ const CompressorStatusCard = ({ name, status }) => {
   );
 };
 
+
 const GasBalanceChart = () => {
-    const data = [
-      { time: '00:00', actual: 4000, forecast: 4100 },
-      { time: '04:00', actual: 3500, forecast: 3800 },
-      { time: '08:00', actual: 4500, forecast: 4300 },
-      { time: '12:00', actual: 4200, forecast: 4400 },
-      { time: '16:00', actual: 4800, forecast: 4600 },
-      { time: '20:00', actual: 4100, forecast: 4200 },
-      { time: '24:00', actual: 3900, forecast: 4000 },
-    ];
-  
-    return (
-      <div className="w-full h-full">
-        <ResponsiveContainer width="100%" height={250}>
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-            <XAxis dataKey="time" stroke="#999" />
-            <YAxis stroke="#999" />
-            <Tooltip 
-              contentStyle={{ backgroundColor: '#1f2937', border: 'none' }}
-              labelStyle={{ color: '#999' }}
-            />
-            <Legend />
-            <Line 
-              type="monotone" 
-              dataKey="actual" 
-              stroke="#3b82f6" 
-              name="Actual"
-              strokeWidth={2}
-            />
-            <Line 
-              type="monotone" 
-              dataKey="forecast" 
-              stroke="#10b981" 
-              name="Forecast"
-              strokeWidth={2}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    );
-  };
-  
+  const data = [
+    { time: '00:00', actual: 4000, forecast: 4100 },
+    { time: '04:00', actual: 3500, forecast: 3800 },
+    { time: '08:00', actual: 4500, forecast: 4300 },
+    { time: '12:00', actual: 4200, forecast: 4400 },
+    { time: '16:00', actual: 4800, forecast: 4600 },
+    { time: '20:00', actual: 4100, forecast: 4200 },
+    { time: '24:00', actual: 3900, forecast: 4000 },
+  ];
+
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <LineChart data={data}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+        <XAxis dataKey="time" stroke="#999" />
+        <YAxis stroke="#999" />
+        <Tooltip 
+          contentStyle={{ backgroundColor: '#1f2937', border: 'none' }}
+          labelStyle={{ color: '#999' }}
+        />
+        <Legend />
+        <Line 
+          type="monotone" 
+          dataKey="actual" 
+          stroke="#3b82f6" 
+          name="Actual"
+          strokeWidth={2}
+        />
+        <Line 
+          type="monotone" 
+          dataKey="forecast" 
+          stroke="#10b981" 
+          name="Forecast"
+          strokeWidth={2}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+};
 
   const Dashboard = () => {
     const compressors = [
@@ -213,8 +175,8 @@ const GasBalanceChart = () => {
           message: (
             <span>
               Pressure exceeds threshold at Compressor <span className="text-yellow-300 font-bold">Murakami</span> - Current: 
-              <span className="text-red-400 font-bold">1250</span> PSI, Suggested: 
-              <span className="text-green-400 font-bold">950</span> PSI
+              <span className="text-red-400 font-bold">8.62</span> MPa, Suggested: 
+              <span className="text-green-400 font-bold">6.55</span> MPa
             </span>
           ), 
           timestamp: '10:45:23',
@@ -298,7 +260,7 @@ const GasBalanceChart = () => {
       };
   
     return (
-      <div className="bg-gray-900 text-white p-4 h-screen">
+      <div className="bg-gray-900 text-white p-4 h-screen min-w-[1280px]">
         <div className="grid grid-cols-4 gap-4 h-full">
           {/* Left Sidebar */}
           <div className="flex flex-col gap-4">
@@ -366,7 +328,7 @@ const GasBalanceChart = () => {
           {/* Main Content - Map and Bottom Section */}
           <div className="col-span-3 flex flex-col gap-4">
             <div className="flex-1 bg-gray-800 p-4 rounded-lg">
-              <SimpleMap />
+              <RealMap />
             </div>
             
             {/* Bottom Section */}
