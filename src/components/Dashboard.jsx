@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { AlertCircle, CloudRain, Power, ThumbsUp, ThumbsDown, Clock } from 'lucide-react';
+import { AlertCircle, CloudRain, Power, ThumbsUp, ThumbsDown, Clock, Bell } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import RealMap from './RealMap';  // Import the new map component
-import 'leaflet/dist/leaflet.css';  // Import Leaflet CSS
+import RealMap from './RealMap';
 
 const DateTime = () => {
   const [date, setDate] = useState(new Date());
@@ -83,29 +82,6 @@ const WeatherWidget = () => {
   );
 };
 
-const CompressorStatusCard = ({ name, status }) => {
-  return (
-    <div className="bg-gray-700 p-2 rounded">
-      <div className="text-sm font-semibold mb-1">{name}</div>
-      <div className="grid grid-cols-1 gap-1">
-        <div className="flex items-center text-sm">
-          <Power className="w-3 h-3 mr-1" />
-          <span>{status.power}</span>
-        </div>
-        <div className="flex items-center text-sm">
-          <ThumbsUp className="w-3 h-3 mr-1" />
-          <span>{status.alerts}</span>
-        </div>
-        <div className="flex items-center text-sm">
-          <ThumbsDown className="w-3 h-3 mr-1" />
-          <span>{status.down}</span>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-
 const GasBalanceChart = () => {
   const data = [
     { time: '00:00', actual: 4000, forecast: 4100 },
@@ -147,218 +123,199 @@ const GasBalanceChart = () => {
   );
 };
 
-  const Dashboard = () => {
-    const compressors = [
-        { name: '村上(Murakami)', status: { power: 0, alerts: 0, down: 0 } },
-        { name: '東金市(Togane)', status: { power: 1, alerts: 0, down: 0 } },
-        { name: '大多喜(Otaki)', status: { power: 1, alerts: 1, down: 0 } },
-        { name: '茂原(Mobara)', status: { power: 2, alerts: 0, down: 1 } },
-        { name: '姉崎(Anegasaki)', status: { power: 0, alerts: 1, down: 0 } },
-        { name: '富津(Futtsu)', status: { power: 1, alerts: 2, down: 2 } },
-        { name: '木更津(Kisarazu)', status: { power: 1, alerts: 0, down: 0 } },
-        { name: '君津(Kimitsu)', status: { power: 0, alerts: 1, down: 1 } },
-        { name: '袖ケ浦(Sodegaura)', status: { power: 2, alerts: 1, down: 0 } }
-      ];
-  
-    const alarmTypes = [
-      { name: 'TOTAL', high: 2, medium: 1, low:0 },
-      { name: 'Pressure', high: 1, medium: 0, low: 0 },
-      { name: 'Flow', high: 0, medium: 0, low: 0 },
-      { name: 'Gas Quality', high: 1, medium: 0, low: 0 },
-      { name: 'Valve', high: 0, medium: 1, low: 0 }
-    ];
-  
-    const alerts = [
-        { 
-          id: 1, 
-          type: 'High', 
-          message: (
-            <span>
-              Pressure exceeds threshold at Compressor <span className="text-yellow-300 font-bold">Murakami</span> - Current: 
-              <span className="text-red-400 font-bold">8.62</span> MPa, Suggested: 
-              <span className="text-green-400 font-bold">6.55</span> MPa
-            </span>
-          ), 
-          timestamp: '10:45:23',
-          location: 'Murakami'
-        },
-        { 
-          id: 2, 
-          type: 'Medium', 
-          message: (
-            <span>
-              Flow rate fluctuation detected at Compressor <span className="text-yellow-300 font-bold">Togane</span>
-            </span>
-          ), 
-          timestamp: '10:42:15',
-          location: 'Togane'
-        },
-        { 
-          id: 3, 
-          type: 'Low', 
-          message: (
-            <span>
-              Valve position warning at Compressor <span className="text-yellow-300 font-bold">Otaki</span>
-            </span>
-          ), 
-          timestamp: '10:40:00',
-          location: 'Otaki'
-        },
-        { 
-          id: 4, 
-          type: 'High', 
-          message: (
-            <span>
-              Pressure exceeds threshold at Compressor <span className="text-yellow-300 font-bold">Mobara</span>
-            </span>
-          ), 
-          timestamp: '10:35:23',
-          location: 'Mobara'
-        },
-        { 
-          id: 5, 
-          type: 'Medium', 
-          message: (
-            <span>
-              Flow rate fluctuation detected at Compressor <span className="text-yellow-300 font-bold">Anegasaki</span>
-            </span>
-          ), 
-          timestamp: '10:32:15',
-          location: 'Anegasaki'
-        },
-        { 
-          id: 6, 
-          type: 'Low', 
-          message: (
-            <span>
-              Valve position warning at Compressor <span className="text-yellow-300 font-bold">Futtsu</span>
-            </span>
-          ), 
-          timestamp: '10:30:00',
-          location: 'Futtsu'
-        },
-        { 
-          id: 7, 
-          type: 'High', 
-          message: (
-            <span>
-              Pressure exceeds threshold at Compressor <span className="text-yellow-300 font-bold">Kisarazu</span>
-            </span>
-          ), 
-          timestamp: '10:25:23',
-          location: 'Kisarazu'
-        }
-      ];
-  
-      const getAlertColor = (type) => {
-        switch (type) {
-          case 'High': return 'bg-red-500';
-          case 'Medium': return 'bg-yellow-500';
-          case 'Low': return 'bg-green-500';
-          default: return 'bg-gray-500';
-        }
-      };
-  
-    return (
-      <div className="bg-gray-900 text-white p-4 h-screen min-w-[1280px]">
-        <div className="grid grid-cols-4 gap-4 h-full">
-          {/* Left Sidebar */}
-          <div className="flex flex-col gap-4">
-            <DateTime />
-            <WeatherWidget />
-            
-            <div className="flex-1 bg-gray-800 p-4 rounded-lg overflow-hidden">
-              <h2 className="text-lg font-semibold mb-3 flex items-center">
-                <AlertCircle className="mr-2" /> Alarms Summary
-              </h2>
-              
-              <table className="w-full mb-4">
-                <thead>
-                  <tr className="text-gray-400 text-sm">
-                    <th className="text-left pb-2"></th>
-                    <th className="text-center pb-2">High</th>
-                    <th className="text-center pb-2">Medium</th>
-                    <th className="text-center pb-2">Low</th>
+const CompressorStatusCard = ({ name, status }) => {
+  return (
+    <div className="bg-gray-700 p-2 rounded">
+      <div className="text-sm font-semibold mb-1">{name}</div>
+      <div className="grid grid-cols-1 gap-1">
+        <div className="flex items-center text-sm">
+          <Power className="w-3 h-3 mr-1" />
+          <span>{status.power}</span>
+        </div>
+        <div className="flex items-center text-sm">
+          <ThumbsUp className="w-3 h-3 mr-1" />
+          <span>{status.alerts}</span>
+        </div>
+        <div className="flex items-center text-sm">
+          <ThumbsDown className="w-3 h-3 mr-1" />
+          <span>{status.down}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Dashboard = () => {
+  const compressors = [
+    { name: '村上(Murakami)', status: { power: 0, alerts: 0, down: 0 } },
+    { name: '東金市(Togane)', status: { power: 1, alerts: 0, down: 0 } },
+    { name: '大多喜(Otaki)', status: { power: 1, alerts: 1, down: 0 } },
+    { name: '茂原(Mobara)', status: { power: 2, alerts: 0, down: 1 } },
+    { name: '姉崎(Anegasaki)', status: { power: 0, alerts: 1, down: 0 } },
+    { name: '富津(Futtsu)', status: { power: 1, alerts: 2, down: 2 } },
+    { name: '木更津(Kisarazu)', status: { power: 1, alerts: 0, down: 0 } },
+    { name: '君津(Kimitsu)', status: { power: 0, alerts: 1, down: 1 } },
+    { name: '袖ケ浦(Sodegaura)', status: { power: 2, alerts: 1, down: 0 } }
+  ];
+
+  const alarmTypes = [
+    { name: 'TOTAL', high: 2, medium: 1, low: 0 },
+    { name: 'Pressure', high: 1, medium: 0, low: 0 },
+    { name: 'Flow', high: 0, medium: 0, low: 0 },
+    { name: 'Gas Quality', high: 1, medium: 0, low: 0 },
+    { name: 'Valve', high: 0, medium: 1, low: 0 }
+  ];
+
+  const alerts = [
+    { 
+      id: 1, 
+      type: 'High', 
+      message: (
+        <span>
+          Pressure exceeds threshold at Compressor <span className="text-yellow-300 font-bold">Murakami</span> - Current: 
+          <span className="text-red-400 font-bold">8.62</span> MPa, Suggested: 
+          <span className="text-green-400 font-bold">6.55</span> PSI
+        </span>
+      ), 
+      timestamp: '10:45:23',
+      location: 'Murakami'
+    },
+    { 
+      id: 2, 
+      type: 'Medium', 
+      message: (
+        <span>
+          Flow rate fluctuation detected at Compressor <span className="text-yellow-300 font-bold">Togane</span>
+        </span>
+      ), 
+      timestamp: '10:42:15',
+      location: 'Togane'
+    },
+    { 
+      id: 3, 
+      type: 'Low', 
+      message: (
+        <span>
+          Valve position warning at Compressor <span className="text-yellow-300 font-bold">Otaki</span>
+        </span>
+      ), 
+      timestamp: '10:40:00',
+      location: 'Otaki'
+    }
+  ];
+
+  const getAlertColor = (type) => {
+    switch (type) {
+      case 'High': return 'bg-red-500';
+      case 'Medium': return 'bg-yellow-500';
+      case 'Low': return 'bg-green-500';
+      default: return 'bg-gray-500';
+    }
+  };
+
+  return (
+    <div className="bg-gray-900 text-white p-4 h-screen min-w-[1280px]">
+      <div className="grid grid-cols-4 gap-4 h-full">
+        {/* Left Sidebar */}
+        <div className="flex flex-col gap-4">
+          <DateTime />
+          <WeatherWidget />
+          
+          {/* Alarms Summary */}
+          <div className="bg-gray-800 p-4 rounded-lg">
+            <h2 className="text-lg font-semibold mb-3 flex items-center">
+              <Bell className="mr-2" /> Alarms Summary
+            </h2>
+            <table className="w-full">
+              <thead>
+                <tr className="text-gray-400 text-sm">
+                  <th className="text-left pb-2"></th>
+                  <th className="text-center pb-2">High</th>
+                  <th className="text-center pb-2">Medium</th>
+                  <th className="text-center pb-2">Low</th>
+                </tr>
+              </thead>
+              <tbody>
+                {alarmTypes.map((type, index) => (
+                  <tr key={index} className={index === 0 ? 'font-bold' : ''}>
+                    <td className="py-1">{type.name}</td>
+                    <td className="text-center">
+                      <span className="inline-block w-6 h-6 rounded bg-red-500 text-center">
+                        {type.high}
+                      </span>
+                    </td>
+                    <td className="text-center">
+                      <span className="inline-block w-6 h-6 rounded bg-yellow-500 text-center">
+                        {type.medium}
+                      </span>
+                    </td>
+                    <td className="text-center">
+                      <span className="inline-block w-6 h-6 rounded bg-green-500 text-center">
+                        {type.low}
+                      </span>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {alarmTypes.map((type, index) => (
-                    <tr key={index} className={index === 0 ? 'font-bold' : ''}>
-                      <td className="py-1">{type.name}</td>
-                      <td className="text-center">
-                        <span className="inline-block w-6 h-6 rounded bg-red-500 text-center">
-                          {type.high}
-                        </span>
-                      </td>
-                      <td className="text-center">
-                        <span className="inline-block w-6 h-6 rounded bg-yellow-500 text-center">
-                          {type.medium}
-                        </span>
-                      </td>
-                      <td className="text-center">
-                        <span className="inline-block w-6 h-6 rounded bg-green-500 text-center">
-                          {type.low}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-  
-              <div className="bg-gray-700/50 rounded-lg p-3">
-                <h3 className="text-sm font-semibold mb-2 flex items-center">
-                  <AlertCircle className="w-4 h-4 mr-2" />
-                  Current Alerts
-                </h3>
-                <div className="space-y-2 overflow-y-auto max-h-[180px]">
-                  {alerts.map((alert) => (
-                    <div key={alert.id} className="flex items-start space-x-2 bg-gray-600 p-2 rounded">
-                      <div className={`w-2 h-2 rounded-full mt-1.5 ${getAlertColor(alert.type)}`} />
-                      <div className="flex-1">
-                        <div className="text-sm">{alert.message}</div>
-                        <div className="text-xs text-gray-400">{alert.timestamp}</div>
-                      </div>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Current Alerts */}
+          <div className="bg-gray-800 p-4 rounded-lg">
+            <h2 className="text-lg font-semibold mb-3 flex items-center">
+              <AlertCircle className="mr-2" />
+              Current Alerts
+            </h2>
+            <div className="bg-gray-700/30 rounded-lg p-3">
+              <div className="space-y-2 overflow-y-auto h-48">
+                {alerts.map((alert) => (
+                  <div key={alert.id} className="flex items-start space-x-2 bg-gray-600/50 p-2 rounded">
+                    <div className={`w-2 h-2 rounded-full mt-1.5 ${getAlertColor(alert.type)}`} />
+                    <div className="flex-1">
+                      <div className="text-sm leading-tight">{alert.message}</div>
+                      <div className="text-xs text-gray-400 mt-1">{alert.timestamp}</div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-  
-          {/* Main Content - Map and Bottom Section */}
-          <div className="col-span-3 flex flex-col gap-4">
-            <div className="flex-1 bg-gray-800 p-4 rounded-lg">
-              <RealMap />
-            </div>
-            
-            {/* Bottom Section */}
-            <div className="grid grid-cols-2 gap-4 h-80">
-              {/* Gas Balance Chart */}
-              <div className="bg-gray-800 p-4 rounded-lg">
-                <h2 className="text-lg font-semibold mb-2">Gas Balance Forecast</h2>
-                <div className="h-64">
-                  <GasBalanceChart />
-                </div>
+        </div>
+
+        {/* Main Content - Map and Bottom Section */}
+        <div className="col-span-3 flex flex-col gap-4">
+          <div className="flex-1 bg-gray-800 p-4 rounded-lg">
+            <RealMap />
+          </div>
+          
+          {/* Bottom Section */}
+          <div className="grid grid-cols-2 gap-4 h-80">
+            {/* Gas Balance Chart */}
+            <div className="bg-gray-800 p-4 rounded-lg">
+              <h2 className="text-lg font-semibold mb-2">Gas Balance Forecast</h2>
+              <div className="h-64">
+                <GasBalanceChart />
               </div>
-  
-              {/* Compressor Status Summary */}
-              <div className="bg-gray-800 p-4 rounded-lg">
-                <h2 className="text-lg font-semibold mb-2">Compressor Status Summary</h2>
-                <div className="h-64 grid grid-cols-5 gap-2 overflow-y-auto">
-                  {compressors.map((compressor, index) => (
-                    <CompressorStatusCard 
-                      key={index}
-                      name={compressor.name}
-                      status={compressor.status}
-                    />
-                  ))}
-                </div>
+            </div>
+
+            {/* Compressor Status Summary */}
+            <div className="bg-gray-800 p-4 rounded-lg">
+              <h2 className="text-lg font-semibold mb-2">Compressor Status Summary</h2>
+              <div className="h-64 grid grid-cols-5 gap-2 overflow-y-auto">
+                {compressors.map((compressor, index) => (
+                  <CompressorStatusCard 
+                    key={index}
+                    name={compressor.name}
+                    status={compressor.status}
+                  />
+                ))}
               </div>
             </div>
           </div>
         </div>
       </div>
-    );
-  };
-  
-  export default Dashboard;
+    </div>
+  );
+};
+
+export default Dashboard;
