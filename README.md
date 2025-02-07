@@ -1,4 +1,3 @@
-```markdown
 # GBV Project - Gas Balance Visualization Dashboard
 
 A React-based dashboard for visualizing gas balance and compressor status data, featuring interactive maps and real-time monitoring.
