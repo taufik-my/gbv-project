@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AlertCircle, CloudRain, Power, ThumbsUp, ThumbsDown, Clock, Bell } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import RealMap from './RealMap';
+import WeatherWidget from './WeatherWidget';  // Update the path as needed
 
 const DateTime = () => {
   const [date, setDate] = useState(new Date());
@@ -31,7 +32,7 @@ const DateTime = () => {
   );
 };
 
-const WeatherWidget = () => {
+const WeatherWidgets = () => {
   const forecast = [
     { day: 'Today', temp: '24°C', condition: 'Sunny' },
     { day: 'Tomorrow', temp: '22°C', condition: 'Cloudy' },
@@ -147,23 +148,23 @@ const CompressorStatusCard = ({ name, status }) => {
 
 const Dashboard = () => {
   const compressors = [
-    { name: '村上(Murakami)', status: { power: 0, alerts: 0, down: 0 } },
-    { name: '東金市(Togane)', status: { power: 1, alerts: 0, down: 0 } },
+    { name: '村上(Murakami)', status: { power: 1, alerts: 0, down: 1 } },
+    { name: '東金市(Togane)', status: { power: 1, alerts: 1, down: 0 } },
     { name: '大多喜(Otaki)', status: { power: 1, alerts: 1, down: 0 } },
-    { name: '茂原(Mobara)', status: { power: 2, alerts: 0, down: 1 } },
-    { name: '姉崎(Anegasaki)', status: { power: 0, alerts: 1, down: 0 } },
-    { name: '富津(Futtsu)', status: { power: 1, alerts: 2, down: 2 } },
+    { name: '茂原(Mobara)', status: { power: 1, alerts: 1, down: 1 } },
+    { name: '姉崎(Anegasaki)', status: { power: 1, alerts: 1, down: 0 } },
+    { name: '富津(Futtsu)', status: { power: 1, alerts: 1, down: 0 } },
     { name: '木更津(Kisarazu)', status: { power: 1, alerts: 0, down: 0 } },
-    { name: '君津(Kimitsu)', status: { power: 0, alerts: 1, down: 1 } },
-    { name: '袖ケ浦(Sodegaura)', status: { power: 2, alerts: 1, down: 0 } }
+    { name: '君津(Kimitsu)', status: { power: 1, alerts: 1, down: 0 } },
+    { name: '袖ケ浦(Sodegaura)', status: { power: 0, alerts: 0, down: 1 } }
   ];
 
   const alarmTypes = [
-    { name: 'TOTAL', high: 2, medium: 1, low: 0 },
+    { name: 'TOTAL', high: 1, medium: 0, low: 0 },
     { name: 'Pressure', high: 1, medium: 0, low: 0 },
     { name: 'Flow', high: 0, medium: 0, low: 0 },
-    { name: 'Gas Quality', high: 1, medium: 0, low: 0 },
-    { name: 'Valve', high: 0, medium: 1, low: 0 }
+    { name: 'Gas Quality', high: 0, medium: 0, low: 0 },
+    { name: 'Valve', high: 0, medium: 0, low: 0 }
   ];
 
   const alerts = [
@@ -172,9 +173,9 @@ const Dashboard = () => {
       type: 'High', 
       message: (
         <span>
-          Pressure exceeds threshold at Compressor <span className="text-yellow-300 font-bold">Murakami</span> - Current: 
+          Pressure exceeds threshold at Station <span className="text-yellow-300 font-bold">Murakami</span> - Current: 
           <span className="text-red-400 font-bold">8.62</span> MPa, Suggested: 
-          <span className="text-green-400 font-bold">6.55</span> PSI
+          <span className="text-green-400 font-bold">6.55</span> MPa
         </span>
       ), 
       timestamp: '10:45:23',
@@ -185,7 +186,7 @@ const Dashboard = () => {
       type: 'Medium', 
       message: (
         <span>
-          Flow rate fluctuation detected at Compressor <span className="text-yellow-300 font-bold">Togane</span>
+          Flow rate fluctuation detected at Station <span className="text-yellow-300 font-bold">Togane</span>
         </span>
       ), 
       timestamp: '10:42:15',
@@ -196,7 +197,7 @@ const Dashboard = () => {
       type: 'Low', 
       message: (
         <span>
-          Valve position warning at Compressor <span className="text-yellow-300 font-bold">Otaki</span>
+          Valve position warning at Station <span className="text-yellow-300 font-bold">Otaki</span>
         </span>
       ), 
       timestamp: '10:40:00',
@@ -214,15 +215,15 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="bg-gray-900 text-white p-4 h-screen min-w-[1280px]">
+    <div className="bg-gray-900 text-white p-4 h-screen overflow-hidden min-w-[1280px]">
       <div className="grid grid-cols-4 gap-4 h-full">
         {/* Left Sidebar */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 max-h-screen overflow-hidden">
           <DateTime />
           <WeatherWidget />
           
           {/* Alarms Summary */}
-          <div className="bg-gray-800 p-4 rounded-lg">
+          <div className="bg-gray-800 p-4 rounded-lg shrink-0">
             <h2 className="text-lg font-semibold mb-3 flex items-center">
               <Bell className="mr-2" /> Alarms Summary
             </h2>
@@ -261,15 +262,15 @@ const Dashboard = () => {
           </div>
 
           {/* Current Alerts */}
-          <div className="bg-gray-800 p-4 rounded-lg">
-            <h2 className="text-lg font-semibold mb-3 flex items-center">
+          <div className="bg-gray-800 p-4 rounded-lg flex flex-col flex-1 min-h-0">
+            <h2 className="text-lg font-semibold mb-3 flex items-center shrink-0">
               <AlertCircle className="mr-2" />
               Current Alerts
             </h2>
-            <div className="bg-gray-700/30 rounded-lg p-3">
-              <div className="space-y-2 overflow-y-auto h-48">
+            <div className="bg-gray-700/30 rounded-lg p-3 flex-1 min-h-0">
+              <div className="h-full overflow-y-auto">
                 {alerts.map((alert) => (
-                  <div key={alert.id} className="flex items-start space-x-2 bg-gray-600/50 p-2 rounded">
+                  <div key={alert.id} className="flex items-start space-x-2 bg-gray-600/50 p-2 rounded mb-2">
                     <div className={`w-2 h-2 rounded-full mt-1.5 ${getAlertColor(alert.type)}`} />
                     <div className="flex-1">
                       <div className="text-sm leading-tight">{alert.message}</div>
@@ -300,7 +301,7 @@ const Dashboard = () => {
 
             {/* Compressor Status Summary */}
             <div className="bg-gray-800 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold mb-2">Compressor Status Summary</h2>
+              <h2 className="text-lg font-semibold mb-2">Station Status Summary</h2>
               <div className="h-64 grid grid-cols-5 gap-2 overflow-y-auto">
                 {compressors.map((compressor, index) => (
                   <CompressorStatusCard 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
-import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Droplet, Thermometer, Wind } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -36,12 +36,30 @@ const StationPopup = ({ station, onPressureAdjust }) => {
 
   if (!station.hasAlert && !isAdjusted) {
     return (
-      <div className="text-gray-900 p-2 min-w-[250px]">
+      <div className="text-gray-900 p-2 min-w-[300px]">
         <h3 className="font-bold mb-2">{station.name}</h3>
-        <div className="bg-gray-50 border border-gray-200 rounded p-2">
-          <div className="flex justify-between items-center">
-            <span className="text-gray-700">Current Pressure:</span>
-            <span className="font-medium">{station.currentPressure.toFixed(2)} MPa</span>
+        <div className="bg-gray-50 border border-gray-200 rounded p-3">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="flex items-center gap-2">
+              <Wind size={16} />
+              <span className="text-gray-700">Pressure:</span>
+              <span className="font-medium">{station.currentPressure.toFixed(2)} MPa</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Droplet size={16} />
+              <span className="text-gray-700">Flow:</span>
+              <span className="font-medium">{station.flowRate} m³/H</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Thermometer size={16} />
+              <span className="text-gray-700">Temp:</span>
+              <span className="font-medium">{station.temperature}°C</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Wind size={16} />
+              <span className="text-gray-700">O₂:</span>
+              <span className="font-medium">{station.oxygenLevel}%</span>
+            </div>
           </div>
         </div>
       </div>
@@ -66,6 +84,24 @@ const StationPopup = ({ station, onPressureAdjust }) => {
             <span className="text-gray-600 ml-2">{adjustedPressure.toFixed(2)} MPa</span>
           </div>
         </div>
+
+        <div className="grid grid-cols-2 gap-2 bg-gray-50 border border-gray-200 rounded p-3">
+          <div className="flex items-center gap-2">
+            <Droplet size={16} />
+            <span className="text-gray-700">Flow:</span>
+            <span className="font-medium">{station.flowRate} m³/H</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Thermometer size={16} />
+            <span className="text-gray-700">Temp:</span>
+            <span className="font-medium">{station.temperature}°C</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Wind size={16} />
+            <span className="text-gray-700">O₂:</span>
+            <span className="font-medium">{station.oxygenLevel}%</span>
+          </div>
+        </div>
       </div>
     );
   }
@@ -85,6 +121,24 @@ const StationPopup = ({ station, onPressureAdjust }) => {
         <div>
           <span className="text-green-700 font-semibold">Suggested Pressure:</span>
           <span className="text-green-600 ml-2">{station.suggestedPressure.toFixed(2)} MPa</span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2 bg-gray-50 border border-gray-200 rounded p-3 mb-3">
+        <div className="flex items-center gap-2">
+          <Droplet size={16} />
+          <span className="text-gray-700">Flow:</span>
+          <span className="font-medium">{station.flowRate} m³/H</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Thermometer size={16} />
+          <span className="text-gray-700">Temp:</span>
+          <span className="font-medium">{station.temperature}°C</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Wind size={16} />
+          <span className="text-gray-700">O₂:</span>
+          <span className="font-medium">{station.oxygenLevel}%</span>
         </div>
       </div>
 
@@ -117,17 +171,84 @@ const RealMap = () => {
       name: 'Murakami', 
       position: [35.7254, 140.3087], 
       hasAlert: true,
-      currentPressure: 8.62,  // ~1250 PSI converted to MPa
-      suggestedPressure: 6.55 // ~950 PSI converted to MPa
+      currentPressure: 8.62,
+      suggestedPressure: 6.55,
+      flowRate: 689,
+      temperature: 8.44,
+      oxygenLevel: 0.00
     },
-    { name: 'Togane', position: [35.5601, 140.3663], hasAlert: false, currentPressure: 6.55 },
-    { name: 'Otaki', position: [35.2888, 140.2469], hasAlert: false, currentPressure: 6.55 },
-    { name: 'Mobara', position: [35.4287, 140.2874], hasAlert: false, currentPressure: 6.55 },
-    { name: 'Anegasaki', position: [35.4766, 140.0264], hasAlert: false, currentPressure: 6.55 },
-    { name: 'Futtsu', position: [35.3084, 139.8569], hasAlert: false, currentPressure: 6.55 },
-    { name: 'Kisarazu', position: [35.3747, 139.9269], hasAlert: false, currentPressure: 6.55 },
-    { name: 'Kimitsu', position: [35.3280, 139.9021], hasAlert: false, currentPressure: 6.55 },
-    { name: 'Sodegaura', position: [35.4308, 140.0242], hasAlert: false, currentPressure: 6.55 }
+    { 
+      name: 'Togane', 
+      position: [35.5601, 140.3663], 
+      hasAlert: false, 
+      currentPressure: 6.55,
+      flowRate: 1193,
+      temperature: 8.63,
+      oxygenLevel: 0.00
+    },
+    { 
+      name: 'Otaki', 
+      position: [35.2888, 140.2469], 
+      hasAlert: false, 
+      currentPressure: 6.55,
+      flowRate: 474,
+      temperature: 8.63,
+      oxygenLevel: 0.00
+    },
+    { 
+      name: 'Mobara', 
+      position: [35.4287, 140.2874], 
+      hasAlert: false, 
+      currentPressure: 6.55,
+      flowRate: 1064,
+      temperature: 8.44,
+      oxygenLevel: 0.00
+    },
+    { 
+      name: 'Anegasaki', 
+      position: [35.4766, 140.0264], 
+      hasAlert: false, 
+      currentPressure: 6.55,
+      flowRate: 213,
+      temperature: -2.13,
+      oxygenLevel: 0.00
+    },
+    { 
+      name: 'Futtsu', 
+      position: [35.3084, 139.8569], 
+      hasAlert: false, 
+      currentPressure: 6.55,
+      flowRate: 172,
+      temperature: 8.63,
+      oxygenLevel: 0.00
+    },
+    { 
+      name: 'Kisarazu', 
+      position: [35.3747, 139.9269], 
+      hasAlert: false, 
+      currentPressure: 6.55,
+      flowRate: 464,
+      temperature: 8.44,
+      oxygenLevel: 0.00
+    },
+    { 
+      name: 'Kimitsu', 
+      position: [35.3280, 139.9021], 
+      hasAlert: false, 
+      currentPressure: 6.55,
+      flowRate: 199,
+      temperature: -2.13,
+      oxygenLevel: 0.00
+    },
+    { 
+      name: 'Sodegaura', 
+      position: [35.4308, 140.0242], 
+      hasAlert: false, 
+      currentPressure: 6.55,
+      flowRate: 608,
+      temperature: 8.63,
+      oxygenLevel: 0.00
+    }
   ]);
 
   const handlePressureAdjust = (stationName, newPressure) => {
