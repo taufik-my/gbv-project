@@ -151,10 +151,10 @@ const Dashboard = () => {
     { name: '村上(Murakami)', status: { power: 1, alerts: 0, down: 1 } },
     { name: '東金市(Togane)', status: { power: 1, alerts: 1, down: 0 } },
     { name: '大多喜(Otaki)', status: { power: 1, alerts: 1, down: 0 } },
-    { name: '茂原(Mobara)', status: { power: 1, alerts: 1, down: 1 } },
+    { name: '茂原(Mobara)', status: { power: 1, alerts: 1, down: 0 } },
     { name: '姉崎(Anegasaki)', status: { power: 1, alerts: 1, down: 0 } },
     { name: '富津(Futtsu)', status: { power: 1, alerts: 1, down: 0 } },
-    { name: '木更津(Kisarazu)', status: { power: 1, alerts: 0, down: 0 } },
+    { name: '木更津(Kisarazu)', status: { power: 1, alerts: 1, down: 0 } },
     { name: '君津(Kimitsu)', status: { power: 1, alerts: 1, down: 0 } },
     { name: '袖ケ浦(Sodegaura)', status: { power: 0, alerts: 0, down: 1 } }
   ];

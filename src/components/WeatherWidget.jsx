@@ -56,6 +56,13 @@ const WeatherWidget = () => {
     return '';
   };
 
+  const getDayName = (daysFromNow) => {
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const date = new Date();
+    date.setDate(date.getDate() + daysFromNow);
+    return days[date.getDay()];
+  };
+
   if (loading || !weather) {
     return (
       <div className="bg-gray-800 p-4 rounded-lg">
@@ -105,8 +112,7 @@ const WeatherWidget = () => {
             {forecast.map((day, index) => (
               <div key={index} className="text-center">
                 <div className="text-xs text-gray-400">
-                  {index === 0 ? 'Fri' : 
-                   index === 1 ? 'Sat' : 'Sun'}
+                  {getDayName(index + 1)}
                 </div>
                 <div className="text-sm font-medium">
                   {Math.round(day.main.temp)}°C
