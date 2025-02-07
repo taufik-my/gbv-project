@@ -75,4 +75,3 @@ You can get an API key by:
 2. Navigate to your account's "API keys" section
 3. Generate a new API key
 4. Add the key to your `.env` file
-```
